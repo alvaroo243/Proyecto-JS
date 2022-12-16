@@ -1,0 +1,29 @@
+#main {
+    background-color: aquamarine;
+}
+
+.nav-link:hover {
+    color: black;
+}
+
+.footer {
+    text-align: center;
+    bottom: 0px;
+    position: fixed;
+    width: 100%;
+    background-color: gray;
+    color: white;
+}
+
+#tiempo {
+    text-align: center;
+}
+
+#tiempo h3 {
+    color: darkorchid;
+    font-weight: bold;
+}
+
+#erroresLogin {
+    color: red;
+}
