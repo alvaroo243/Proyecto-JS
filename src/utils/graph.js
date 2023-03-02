@@ -1,39 +1,32 @@
-
+import Chart from "chart.js/auto";
+import { getAllCuentas } from "../services/GestionDeCuentas";
 
 export {generateGrahp};
 
 function generateGrahp() {
-    const grafica = document.createElement("canvas");
-    const etiquetas = "Usuarios";
-    const datos = {
-        label: "Ventas por mes",
-        data: [1, 2, 3, 4], // La data es un arreglo que debe tener la misma cantidad de valores que la cantidad de etiquetas
-        backgroundColor: 'rgba(54, 162, 235, 0.2)', // Color de fondo
-        borderColor: 'rgba(54, 162, 235, 1)', // Color del borde
-        borderWidth: 1,// Ancho del borde
-    };
-
-    new Chart(grafica, {
-        type: 'line',// Tipo de gráfica
-        data: {
-            labels: etiquetas,
-            datasets: [
-                datos
-                // Aquí más datos...
-            ]
-        },
-        options: {
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        beginAtZero: true
-                    }
-                }],
-            },
-        }
+    let contador = 0;
+    let arrayContador = new Array;
+    getAllCuentas().then((datos) => {
+      for (const cuenta of datos) { // Guardaria en un array cada numero de usuarios que hay para que en el grafico se vea como sube
+        contador++;
+        arrayContador.push(contador);
+        
+      }
     });
-}
-
-function historicoUsuarios() {
     
+    let canvas = document.createElement("div");
+    canvas.innerHTML = `<canvas id="graficaDias" width="200" height="30"></canvas>`;
+    new Chart(canvas.querySelector("#graficaDias"), {
+        type: "line",
+        data: {
+          datasets: [
+            {
+              label: "Usuarios loggeados",
+              data: arrayContador.map((dato) => dato), 
+              borderWidth: 1,
+            },
+          ],
+        },
+      });
+      return canvas;
 }

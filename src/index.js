@@ -8,8 +8,8 @@ import * as bootstrap from 'bootstrap';
 
 
 
-(() => {
-        document.addEventListener("DOMContentLoaded", () => {
+(() => { //Autoinvocado
+        document.addEventListener("DOMContentLoaded", () => { //Flecha
                 let body = document.body;
                 body.append(generateMenu());
                 let main = document.createElement("div");

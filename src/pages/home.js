@@ -7,6 +7,6 @@ export {home};
 function home() {
   let container = document.querySelector('#main');
   container.append(generateDatosTiempo());
+  container.append(generateGrahp());
   container.append(generateCard("Cabecera", "Titulo", "Texto", "Pie"));
-  
 }

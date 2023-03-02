@@ -1,10 +1,10 @@
 export {loginSupabase, fileRequest, getFileRequest, signUpSupabase , logoutSupabase, recoverPasswordSupabase, getData, updateData, createData};
 
 const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNvaWt1YWhtdGVycnlzc2hjd3d2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2NjgwMDc5NjgsImV4cCI6MTk4MzU4Mzk2OH0.BIdzUgQGNdQx1s7Dn9IIRnHOJj_bALoBY7p-gQYh3K8"
-const urlBase = "https://soikuahmterrysshcwwv.supabase.co";
+const URL_BASE = "https://soikuahmterrysshcwwv.supabase.co";
 const headers = {
     "apiKey": SUPABASE_KEY,
-    "Content-Type": "application/json",
+    "Content-Type": "application/json"
 }; 
 
 async function supaRequest(url,method,headers,body){
@@ -26,7 +26,7 @@ async function fileRequest(url,body,token){
         "Authorization" :`Bearer ${token}`,
         "x-upsert": true 
     }; 
-    let response = await fetch(`${urlBase}${url}`,{
+    let response = await fetch(`${URL_BASE}${url}`,{
         method: 'POST',
         headers: headersFile,
         body
@@ -34,7 +34,7 @@ async function fileRequest(url,body,token){
     if(response.status >=200 && response.status <=300){
         if(response.headers.get("content-type")){
             let datos = await response.json();
-            datos.urlAvatar = `${urlBase}${url}`;
+            datos.urlAvatar = `${URL_BASE}${url}`;
             return datos;
         }
         return {};
@@ -67,41 +67,41 @@ async function getFileRequest(url,token){
 }
 
 async function loginSupabase(email,password){ 
-    let url = `${urlBase}/rest/v1/Usuarios?select=password`;
+    let url = `${URL_BASE}/auth/v1/token?grant_type=password`;
     let data = await supaRequest(url,'post',headers,{ email, password });
     return data;
 }
 
 async function signUpSupabase(email,password){ 
-    let url = `${urlBase}/auth/v1/signup`;
+    let url = `${URL_BASE}/auth/v1/signup`;
     let data = await supaRequest(url,'post',headers,{ email, password });
     return data;
 }
 
 async function logoutSupabase(token){ 
-    let url = `${urlBase}/auth/v1/logout`;
-    let headersAux = {...headers, "Authorization" :"Bearer "+token};
+    let url = `${URL_BASE}/auth/v1/logout`;
+    let headersAux = {...headers, "Authorization" :"Bearer "+token}; // Destructuring
     let data = await supaRequest(url,'post',headersAux,{});
     return data;
 }
 
 async function recoverPasswordSupabase(email){
-    let url = `${urlBase}/auth/v1/recover`;
-    let headersAux = {...headers};
-    let data = await supaRequest(url,'post',headersAux,{email});
+    let url = `${URL_BASE}/auth/v1/recover`;
+    let headersAux = {...headers}; // Destructuring
+    let data = await supaRequest(url,'post',headersAux,{"email":email});
     return data;
 }
 
 async function getData(URI,token){
-    let url = `${urlBase}/rest/v1/${URI}`;
-    let headersAux = {...headers, "Authorization" :"Bearer "+token};
-    let data = await supaRequest(url,'get',headersAux);
+    let url = `${URL_BASE}/rest/v1/${URI}`;
+    let headersAux = {...headers, "Authorization" :"Bearer "+token}; // Destructuring
+    let data = await supaRequest(url,'get',headersAux); // Las peticiones get no me funcionan y no se porque, pienso que las hago bien
     return data;
 }
 
 async function updateData(URI,token,data){
-    let url = `${urlBase}/rest/v1/${URI}`;
-    let headersAux = {...headers, 
+    let url = `${URL_BASE}/rest/v1/${URI}`;
+    let headersAux = {...headers, // Destructuring
         "Authorization" :"Bearer "+token,
         "Prefer" : "return=representation"
     };
@@ -110,10 +110,10 @@ async function updateData(URI,token,data){
 }
 
 async function createData(URI,token,data){
-    let url = `${urlBase}/rest/v1/${URI}`;
-    let headersAux = {...headers, 
+    let url = `${URL_BASE}/rest/v1/${URI}`;
+    let headersAux = {...headers, // Desstucturing
         "Authorization" :"Bearer "+token,
-        "Prefer" : "return=representation"
+        "Prefer" : "return=minimal"
     };
     let response = await supaRequest(url,'post',headersAux,data);
     return response;

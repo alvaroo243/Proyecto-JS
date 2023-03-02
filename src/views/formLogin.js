@@ -1,40 +1,101 @@
-export {generateLogin};
+export {generateLogin, generateRegister};
 
-import { generateBotonPredefinidos } from "../utils/addUsersPredefinidos";
-import { addPredefinidos } from "../utils/addUsersPredefinidos";
 import { validarForm } from "../utils/validarLogin";
+import { loginUser, registerUser } from "../services/GestionDeUsuarios";
+import { createCuenta } from "../services/GestionDeCuentas";
+import { comprobarCuentaYSiNoHayCrear } from "../utils/cuentas";
 
 function generateLogin() {
     let login = document.createElement("div");
     login.id = "login";
-    login.innerHTML =generateBotonPredefinidos()+`
+    login.innerHTML = `
             <h1 id="tituloLogin" >Login:</h1>
             <div id="erroresLogin"></div><br>
-            <div>
+            <div class="form">
                 <form action="" method="post" >
-                    <label>Nickname o email:</label>
+                    <label>Email:</label>
                     <input type="text" id="inputLogin" required /><br><br>
                     <label>Contraseña:</label>
                     <input type="password" id="inputCont" required /><br><br>
                     <button type="button" id="botonLogin">Login</button>
                 </form>
-            </div>
+            </div><br>
+            <div id="olvido"></div>
     `;
     login.querySelector("#botonLogin").addEventListener("click", async ()=> {
-        let inpt = login.querySelector("#inputLogin").value;
+        let email = login.querySelector("#inputLogin").value;
         let passw = login.querySelector("#inputCont").value;
-        if (validarForm(inpt, passw)) {
-            if (inpt.includes("@")) {
-            
-            } else {
-                console.log("NOOOOOOOOOOO");
-            }
+        if (validarForm(email, passw)) {
+            await loginUser(email, passw).then((res) => {
+                if (res.success === true) {
+                    comprobarCuentaYSiNoHayCrear(email);
+                    alert("Sesion Iniciada!");
+                    window.location.reload();
+                } else {
+                    alert("Usuario o contraseña incorrectos!");
+                    let olvidoPass = document.createElement("a");
+                    olvidoPass.innerHTML = "¿Has olvidado tu contraseña?";
+                    olvidoPass.href = "#/olvidoPass";
+                    login.append(olvidoPass);
+                }
+            });
         } else {
             login.querySelector("#erroresLogin").innerHTML = "Nickname o email y contraseña deben de estar introducidos";
         }
     });
-    login.querySelector("#botonPredef").addEventListener("click", addPredefinidos);
-
     return login;
 }
 
+function generateRegister() {
+    let registro = document.createElement("div");
+    registro.id = "registro";
+    registro.innerHTML = `
+            <h1 id="tituloRegistro" >Registro:</h1>
+            <div id="erroresRegistro"></div><br>
+            <div class="form">
+                <form action="" method="post" >
+                    <label>Email:</label>
+                    <input type="text" id="inputRegistro" required /><br><br>
+                    <label>Contraseña:</label>
+                    <input type="password" id="inputCont" required /><br><br>
+                    <button type="button" id="botonRegistro">Registro</button>
+                </form>
+            </div>
+    `;
+    registro.querySelector("#botonRegistro").addEventListener("click", async ()=> {
+        let email = registro.querySelector("#inputRegistro").value;
+        let passw = registro.querySelector("#inputCont").value;
+        if (validarForm(email, passw)) {
+            await registerUser(email, passw).then((res) => {
+                console.log(res);
+                if (res.success === true) {
+                    alert("Usuario creado! Revisa tu correo para verificar el usuario!");
+                    window.location.reload();
+                } else {
+                    alert("Usuario o contraseña incorrectos!");
+                }
+            });
+            
+        } else {
+            registro.querySelector("#erroresRegistro").innerHTML = "Nickname o email y contraseña deben de estar introducidos";
+        }
+    });
+    return registro;
+}
+
+/*
+FORMDATA
+
+formElem.onsubmit = async (e) => {
+    e.preventDefault();
+
+    let response = await fetch('', {
+      method: 'POST',
+      body: new FormData(formElem)
+    });
+
+    let result = await response.json();
+
+    alert(result.message);
+  };
+*/

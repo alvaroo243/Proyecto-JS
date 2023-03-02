@@ -24,6 +24,56 @@
     font-weight: bold;
 }
 
+#tituloLogin {
+    background-color: aqua;
+    padding: 10px;
+    width: 40%;
+    margin: auto auto;
+    text-align: center;
+    font-weight: 1000;
+    border: 1px solid black;
+}
+
+#tituloRegistro {
+    background-color: lightblue;
+    padding: 10px;
+    width: 45%;
+    margin: auto auto;
+    text-align: center;
+    font-weight: 1000;
+    border: 1px solid black;
+}
+
+.form {
+    width: 60%;
+    background-color: bisque;
+    text-align: center;
+    margin: auto auto;
+    padding: 10px;
+    
+}
+
+#login {
+    padding: 10px;
+}
+
+#registro {
+    padding: 10px;
+}
+
 #erroresLogin {
+    color: red;
+}
+
+#erroresRegistro {
+    color: red;
+}
+
+#botonLogOut {
+    border: none;
+    background: none;
+}
+
+#botonLogOut:hover {
     color: red;
 }
